@@ -34,7 +34,7 @@ def cli():
     pass
 
 @cli.command()
-@click.option('--city', help="Get Weather Data for a City [cityname]", metavar='<city>' ,required=True, type=str, nargs=1)
+@click.option('--city', help="Get Current Weather Data for a City [cityname]", metavar='<city>' ,required=True, type=str, nargs=1)
 @click.argument('city')
 def city(city):
     city = city.title()
@@ -56,7 +56,7 @@ def city(city):
         logging.warning(f"API response error for city: {city}. Error: {error_message}")
     else:
         print("*****************************************************************************************")
-        click.echo(click.style("[ Weather Report 📝]", bold=True))
+        click.echo(click.style("[ Current Weather Report 📅]", bold=True))
         #city named followed by the state name and country name by comma like " - city, state, country"
         #{result['location']['region']},{result['location']['country']}
         #click.echo(click.style(f" - {city},{['location']['region']},{['location']['country']}",fg="blue"))
@@ -74,7 +74,7 @@ def city(city):
             return
         
         click.echo(click.style("\n[ Location Information 🌍]", bold=True, fg="blue"))
-        click.echo(click.style(f" - City name: {click.style(city, underline=True, bold=True, fg='red')}", bold=True))
+        click.echo(click.style(f" - City name: {click.style(city, underline=True, bold=True, fg='red')}" + " on " + dt.datetime.now().strftime("%d %b %Y" +" at "+"%H:%M:%S"), bold=True))
         click.echo(click.style(f" - State/Region: {region_name}"))
         click.echo(click.style(f" - Country: {country_name}"))
         
@@ -85,7 +85,7 @@ def city(city):
         display_weather_data(response)
 
 @cli.command()
-@click.option('--cities', help="Cities Names [cityname] [cityname]...", metavar='<city1> <city2> ...', required=True, multiple=True, type=str)
+@click.option('--cities', help="Current weather data for Cities [cityname] [cityname]...", metavar='<city1> <city2> ...', required=True, multiple=True, type=str)
 @click.argument('cities', nargs=-1)
 def cities(cities):
     BASE_URL = "http://api.openweathermap.org/data/2.5/weather"
@@ -112,7 +112,7 @@ def cities(cities):
 
     for result in results:
         print("\n*****************************************************************************************")
-        click.echo(click.style("[ Weather Report 📝]", bold=True))
+        click.echo(click.style("[ Current Weather Report 📅]", bold=True))
         #click.echo(click.style(f" - {result['city']}", fg="blue"))
 
         if 'error' in result:
@@ -140,9 +140,56 @@ def cities(cities):
 
             display_weather_data(result['data'])
 
+@cli.command()
+@click.option('--tcity', help="Get Today's Weather Data for a City [cityname]", metavar='<city>', required=True, type=str, nargs=1)
+@click.argument('tcity')
+def today(tcity):
+    tcity = tcity.title()
+    BASE_URL = "http://api.openweathermap.org/data/2.5/weather"
+    url = f"{BASE_URL}?appid={API_KEY}&q={tcity}"
+
+    try:
+        response = requests.get(url).json()
+        logging.info(f"API request successful for city: {tcity}")
+    except requests.exceptions.RequestException as e:
+        logging.error(f"API request failed for city: {tcity}. Error: {e}")
+        click.echo(f"Error: Failed to fetch weather data for {tcity}. Please try again later.")
+        return
+
+    if 'message' in response:
+        error_message = response['message']
+        click.echo(f"Error: {error_message}")
+        logging.warning(f"API response error for city: {tcity}. Error: {error_message}")
+    else:
+        print("*****************************************************************************************")
+        click.echo(click.style("[ Today's Weather Report 📅]", bold=True))
+        #city named followed by the state name and country name by comma like " - city, state, country"
+        #{result['location']['region']},{result['location']['country']}
+        #click.echo(click.style(f" - {city},{['location']['region']},{['location']['country']}",fg="blue"))
+        lan = response["coord"]["lon"]
+        lat = response["coord"]["lat"]
+                # Get city, region, and country names from reverse geocoding
+        geocode_url = f"https://api.openweathermap.org/geo/1.0/reverse?lat={lat}&lon={lan}&limit=1&appid={API_KEY}"
+        try:
+            geocode_response = requests.get(geocode_url).json()
+            region_name = geocode_response[0]['state']
+            country_name = geocode_response[0]['country']
+        except (requests.exceptions.RequestException, IndexError, KeyError) as e:
+            logging.error(f"Reverse geocoding failed for city: {tcity}. Error: {e}")
+            click.echo(f"Error: Failed to retrieve location information. Please try again later.")
+            return
+        
+        click.echo(click.style("\n[ Location Information 🌍]", bold=True, fg="blue"))
+        click.echo(click.style(f" - City name: {click.style(tcity, underline=True, bold=True, fg='red')}" + " on " + dt.datetime.now().strftime("%d %b %Y" +" at "+"%H:%M:%S"), bold=True))
+        click.echo(click.style(f" - State/Region: {region_name}"))
+        click.echo(click.style(f" - Country: {country_name}"))
+        display_weather_data(response)
+
+
+
 def display_weather_data(response):
-    Geolan = response["coord"]["lon"]
-    Geolat = response["coord"]["lat"]
+    #Geolan = response["coord"]["lon"]
+    #Geolat = response["coord"]["lat"]
     weathertype = response["weather"][0]["main"]
     weathertypedesc = response["weather"][0]["description"]
     datasource = response["base"]
@@ -168,23 +215,23 @@ def display_weather_data(response):
     sunrise = dt.datetime.utcfromtimestamp(response["sys"]["sunrise"] + response["timezone"])
     sunset = dt.datetime.utcfromtimestamp(response["sys"]["sunset"] + response["timezone"])
 
-    visibility = response.get("visibility")
+    #visibility = response.get("visibility")
     cloudiness = response["clouds"]["all"]
     precipitation = response.get("rain", {}).get("1h", 0.0)
 
     click.echo(click.style("\n[ Source of Data ]", bold=True,fg="blue"))
     click.echo(f" - {click.style(datasource, bold=True)}")
 
-    click.echo(click.style("\n[ GeoLocation Information 🌐]", bold=True, fg="blue"))
-    click.echo(f" - Longitude: {Geolan}")
-    click.echo(f" - Latitude: {Geolat}")
+    #click.echo(click.style("\n[ GeoLocation Information 🌐]", bold=True, fg="blue"))
+    #click.echo(f" - Longitude: {Geolan}")
+    #click.echo(f" - Latitude: {Geolat}")
 
     click.echo(click.style("\n[ General Information 🌡 ]", bold=True, fg="blue"))
     click.echo(f" - Temperature: {temp_celsius:.2f}°C ({temp_fahrenheit:.2f}°F)")
     click.echo(f" - Feels Like: {feels_like_celsius:.2f}°C ({feels_like_fahrenheit:.2f}°F)")
-    click.echo(f" - Minimum Temperature: {tempmin_celsius:.2f}°C ({tempmin_fahrenheit:.2f}°F)")
+    click.echo(f"\n - Minimum Temperature: {tempmin_celsius:.2f}°C ({tempmin_fahrenheit:.2f}°F)")
     click.echo(f" - Maximum Temperature: {tempmax_celsius:.2f}°C ({tempmax_fahrenheit:.2f}°F)")
-    click.echo(f" - Humidity: {humidity}%")
+    click.echo(f" \n - Humidity: {humidity}%")
     click.echo(f" - Pressure: {pressure} hPa")
 
     click.echo(click.style("\n[ Weather Details 🌦 ]", bold=True, fg="blue"))
@@ -192,7 +239,7 @@ def display_weather_data(response):
     click.echo(f" - Description: {weathertypedesc}")
    
     click.echo(click.style("\n[ Visibility and Cloudiness 🥽 ]", bold=True, fg="blue"))
-    click.echo(f" - Visibility: {visibility} m")
+    #click.echo(f" - Visibility: {visibility} m")
     click.echo(f" - Cloudiness: {cloudiness}%")
     click.echo(f" - Precipitation: {precipitation} mm")
 
