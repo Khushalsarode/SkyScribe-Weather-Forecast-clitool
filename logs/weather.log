@@ -100,3 +100,18 @@ INFO:root:API request successful for city: Jalgaon
 INFO:root:API request successful for city: Jalgaon
 INFO:root:API request successful for city: Pune
 INFO:root:API request successful for city: Mumbai
+INFO:root:API request successful for city: Jalgaon
+INFO:root:API request successful for city: Jalgaon
+INFO:root:API request successful for city: Pune
+INFO:root:API request successful for city: Mumbai
+INFO:root:API request successful for city: Jalgaon
+INFO:root:API request successful for city: Jalgaon
+INFO:root:API request successful for city: Jalgaon
+INFO:root:API request successful for city: Jalgaon
+INFO:root:API request successful for city: Jalgaon
+INFO:root:API request successful for city: Pune
+INFO:root:API request successful for city: Mumabai
+WARNING:root:API response error for city: Mumabai. Error: city not found
+INFO:root:API request successful for city: Jalgaon
+INFO:root:API request successful for city: Pune
+INFO:root:API request successful for city: Mumbai

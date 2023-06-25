@@ -1,8 +1,9 @@
-# SkyScribe
 
 ![SkyScribe Logo](logo.png)
-
+# SkyScribe
 ##  `Look Up to the Sky, Command the Forecast!`
+## EXECUTION:
+![Video Title](https://youtu.be/p7STVVIpHak)
 
 ## Description
 
@@ -19,7 +20,7 @@ SkyScribe is a powerful weather tool that allows you to effortlessly access and 
 
 ## Hackathon Project: Weather Forecasting Tool (Python)
 
-SkyScribe was created as part of a hackathon project with the goal of developing a weather forecasting tool that demonstrates the capabilities of Python programming, API integration, data parsing, and error handling. The project leverages the OpenWeatherMap API to fetch weather data for the specified cities and utilizes Python to parse and present the information to the user.
+SkyScribe was created as part of a hackathon project with the goal of developing a weather forecasting command line tool that demonstrates the capabilities of Python programming, API integration, data parsing, and error handling. The project leverages the OpenWeatherMap API to fetch weather data for the specified cities and utilizes Python to parse and present the information to the user.
 
 ### API: OpenWeatherMap
 
@@ -27,7 +28,7 @@ SkyScribe integrates the OpenWeatherMap API to retrieve weather data. OpenWeathe
 
 ### GitHub Copilot
 
-During the hackathon project, the team utilized GitHub Copilot, an AI-powered code completion tool, to assist with various aspects of the development process. GitHub Copilot proved to be instrumental in suggesting API usage patterns, providing guidance on data parsing techniques, and offering error handling suggestions. Its intelligent code suggestions and autocomplete capabilities helped streamline the development workflow and improve overall productivity.
+During the hackathon project, our team leveraged the AI-powered code completion tool, GitHub Copilot, to create a dynamic command-line tool. By simply commenting our desired functionality, Copilot provided accurate code suggestions for fetching APIs, optimizing code structure, and suggesting data parsing techniques. Its autocomplete capabilities and contextual understanding streamlined our workflow, improving productivity and allowing us to focus on core functionality. Copilot's optimized code generation and error handling suggestions proved invaluable, revolutionizing our coding experience and enabling us to deliver a robust tool in a shorter timeframe.
 
 ## Installation
 
@@ -36,7 +37,7 @@ To get started with SkyScribe, follow these steps:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/SkyScribe.git
+   git clone https://github.com/Khushalsarode/SkyScribe-Weather-Forecast-clitool.git
    ```
 
 2. Install the required packages by running the following command:
@@ -49,6 +50,7 @@ To get started with SkyScribe, follow these steps:
 
 4. Execute the main file `skyscribe.py` to start the program.
 
+
 ### Setup Instructions
 
 To set up the SkyScribe project on your local machine, follow these steps:
@@ -58,7 +60,7 @@ To set up the SkyScribe project on your local machine, follow these steps:
  ```shell
    pip install /path/to/SkyScribe/dist/SkyScribe-1.0.tar.gz
    ```
-
+   
    Make sure to replace `/path/to/SkyScribe/dist/SkyScribe-1.0.tar.gz` with the actual path to your distribution package file.
 
 **Step 2: Install from PyPI**
@@ -69,6 +71,107 @@ To set up the SkyScribe project on your local machine, follow these steps:
    pip install SkyScribe
    ```
    Note: It's generally recommended to use a virtual environment (`myenv`) to isolate project dependencies and avoid conflicts.
+
+## Usage
+
+To use SkyScribe as a command-line tool, follow the instructions below:
+- To get help and see available commands, run:
+
+  ```bash
+  skyscribe <command> --help
+  ```
+  Example: `skyscribe city --help`
+
+- For a single city forecast, run the following command:
+
+  ```bash
+  skyscribe <command> "CityName" 
+  ```
+  Example: `skyscribe city Jalgaon`
+
+  Replace `"City Name"` with the name of the city you want to retrieve the weather forecast for.
+
+- For multiple city forecasts, run the following command:
+
+  ```bash
+  skyscribe <command> "City Name 1" "City Name 2" "City Name 3"
+  ```
+  Example: `skyscribe cities Jalgaon Pune Mumbai`
+
+  Replace `"City Name 1"`, `"City Name 2"`, etc., with the names of the cities you want to retrieve the weather forecasts for.
+
+The tool will display the weather forecasts for the specified cities in the command-line interface.
+
+- For a single city that day weather forecast, run the following command:
+
+  ```bash
+  skyscribe <command> "CityName" 
+  ```
+  Example: `skyscribe today Jalgaon`
+# SkyScribe WeatherApp Code Flow
+
+The following is the architectural flow of the WeatherApp code:
+
+1. Import required libraries and modules:
+   - `datetime` for date and time operations
+   - `os` for interacting with the operating system
+   - `click` for creating command-line interfaces
+   - `requests` for making HTTP requests
+   - `logging` for logging application events
+   - `dotenv` for loading environment variables from a file
+
+2. Load environment variables using `dotenv` module:
+   - The `load_dotenv()` function loads environment variables from a file into the application.
+
+3. Get the API key from the environment variable:
+   - The API key is stored in the `API_KEY` variable, retrieved from the environment variable.
+
+4. Configure logging:
+   - The `basicConfig()` function from the `logging` module is used to configure the logging settings.
+   - The log file is set to `.\logs\weather.log`.
+   - The log level is set to `INFO`, which logs all events with severity level INFO or higher.
+
+5. Set tool information:
+   - The tool name, version, and slogan are retrieved from environment variables (`TOOL_NAME`, `VERSION`, `SLOGAN`).
+   - These variables are used to display information about the tool.
+
+6. Define utility functions:
+   - `kelvin_to_celsius_fahrenheit()` function converts temperature from Kelvin to Celsius and Fahrenheit.
+
+7. Define the command-line interface using `click`:
+   - The `cli()` function is decorated with `@click.group()` to create a command group.
+   - The command group serves as the entry point for executing different commands.
+
+8. Define commands:
+   - The WeatherApp provides the following commands:
+     - `city`: Get current weather data for a specific city.
+     - `cities`: Get current weather data for multiple cities.
+     - `today`: Get today's weather data for a specific city.
+
+9. Implement the `city` command:
+   - This command takes a city name as an argument.
+   - It constructs the API request URL using the city name and API key.
+   - It makes an HTTP request to the OpenWeatherMap API to get the weather data.
+   - If the request is successful, it displays the location information and weather data.
+   - If there is an error, it logs the error and displays an appropriate error message.
+
+10. Implement the `cities` command:
+    - This command takes multiple city names as arguments.
+    - It iterates over the provided cities and performs the same steps as the `city` command for each city.
+    - It collects the weather data for each city and stores it in a list.
+    - After processing all cities, it displays the location information and weather data for each city.
+
+11. Implement the `today` command:
+    - This command is similar to the `city` command but specifically fetches today's weather data for a city.
+
+12. Implement the `display_weather_data()` function:
+    - This function takes the weather data response as input.
+    - It extracts relevant information from the response and displays it using `click.echo()`.
+
+13. Execute the command-line interface:
+    - The `if __name__ == '__main__':` block ensures that the command-line interface is executed when the script is run directly.
+
+This architectural flow describes how the WeatherApp code is structured and how it interacts with the OpenWeatherMap API to fetch and display weather data for cities.
 
 #### Package Creation Process
 
@@ -134,35 +237,7 @@ To create the distribution package, follow these steps:
 
 These instructions should help you set up the SkyScribe project on your local machine. If you have any further questions or need assistance, feel free to ask.
 
-## Usage
 
-To use SkyScribe as a command-line tool, follow the instructions below:
-- To get help and see available commands, run:
-
-  ```bash
-  skyscribe <command> --help
-  ```
-  Example: `skyscribe city --help`
-
-- For a single city forecast, run the following command:
-
-  ```bash
-  skyscribe <command> "CityName" 
-  ```
-  Example: `skyscribe city Jalgaon`
-
-  Replace `"City Name"` with the name of the city you want to retrieve the weather forecast for.
-
-- For multiple city forecasts, run the following command:
-
-  ```bash
-  skyscribe <command> "City Name 1" "City Name 2" "City Name 3"
-  ```
-  Example: `skyscribe cities Jalgaon Pune Mumbai`
-
-  Replace `"City Name 1"`, `"City Name 2"`, etc., with the names of the cities you want to retrieve the weather forecasts for.
-
-The tool will display the weather forecasts for the specified cities in the command-line interface.
 
 ## Contributing
 
