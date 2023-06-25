@@ -254,12 +254,7 @@ SkyScribe is licensed under the [MIT License](LICENSE).
 
 ## Contact
 
-For any questions, concerns, or feedback, please reach out
-
- to the project
-
- team at skyscribe@example.com.
-
+For any questions, concerns, or feedback, please reach out to the project team at khushalsarode
 ---
 
 Thank you for your interest in SkyScribe! We hope you find it useful for all your weather forecasting needs.
