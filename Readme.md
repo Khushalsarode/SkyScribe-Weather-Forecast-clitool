@@ -3,7 +3,7 @@
 # SkyScribe
 ##  `Look Up to the Sky, Command the Forecast!`
 ## EXECUTION:
-![Video Title](https://youtu.be/p7STVVIpHak)
+![SkyScribe Execution](https://youtu.be/p7STVVIpHak)
 
 ## Description
 
